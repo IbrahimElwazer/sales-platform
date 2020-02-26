@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 
 
+
 router.post('/register', (req, res) => {
     const userData = {
         first_name: req.body.first_name,
@@ -19,8 +20,11 @@ router.post('/register', (req, res) => {
         }
     }).then(user => {
         if (user) {
-            res.send("this account already exists")
+            res.send("This account already exists!")
         } else {
+        if ( req.body.username ==  null || req.body.password == null) {
+            res.send("Failed to register, username and password must be given!")
+         } else{
            bcyrpt.hash(req.body.password, 12, (err, hash) => {
                userData.password = hash
                User.create(userData).then(user => {
@@ -29,15 +33,15 @@ router.post('/register', (req, res) => {
                    res.send(error)
                })
            })
-        }
+         }
+      }
     }).catch(err => res.send(err));
 });
 
 
+
 router.post('/login', (req, res) => {
-    // const options = {
-    //     expiresIn: 1440
-    // }
+    
     User.findOne({
         where: {
             username: req.body.username
@@ -46,14 +50,16 @@ router.post('/login', (req, res) => {
         if(user){
             bcyrpt.compare(req.body.password, user.password).then(password => {
                 if(password){
-                    let token = jwt.sign(user.username, process.env.TOKEN_SECRET);
-                    res.send("Your token: " + token)
+                    jwt.sign(user.username, process.env.TOP_SECRET, (err, token) => {
+                        if(err) { console.log(err) }    
+                        res.json({Token: token});
+                    });
                 } else{
                     res.send("Incorrect password entered!")
                 }
              })    
             } else{
-                res.send("Incorrect username enetered!")
+                res.send("Incorrect username entered!")
             }
         }
     )
