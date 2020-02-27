@@ -28,10 +28,10 @@ module.exports = db.sequelize.define(
             type: Sequelize.STRING
         },
         price: {
-            type: Sequelize.FLOAT
+            type: Sequelize.DECIMAL(10,2)
         },
         postDate: {
-            type: Sequelize.DATE
+            type: Sequelize.DATEONLY
         },
         deliveryType: {
             type: Sequelize.STRING

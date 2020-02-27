@@ -6,19 +6,17 @@ const user = require('./routes/user');
 const posts = require('./routes/posts');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
 const passport = require('passport');
+const path = require('path');
 
-const bcrypt = require('bcrypt');
-const User = require('./models/users');
 
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(logger('dev'));
 app.use(passport.initialize());
-
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(__dirname + '/static'));
 
 // the main app routes 
 app.use('/user', user);

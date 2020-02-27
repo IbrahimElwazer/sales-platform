@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
         if (user) {
             res.send("This account already exists!")
         } else {
-        if ( req.body.username ==  null || req.body.password == null) {
+        if ( 'username' in req.body == false || 'password' in req.body == false) {
             res.send("Failed to register, username and password must be given!")
          } else{
            bcyrpt.hash(req.body.password, 12, (err, hash) => {
