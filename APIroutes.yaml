@@ -1,0 +1,601 @@
+openapi: 3.0.0
+info:
+  title: Salespoint / online market
+  version: '1.0'
+  description: 'A salespoint for selling and buying products, such as Amazon.com'
+  contact:
+    name: Ibrahim Elwazer
+    email: ibrahimelwazer123@gmail.com
+servers:
+  - url: 'http://localhost:4000'
+paths:
+  /user/register:
+    post:
+      summary: Create new account
+      tags: []
+      responses:
+        '200':
+          description: '"username" was successfully created!'
+        '':
+          description: '"username" was successfully created!'
+      operationId: register-new-user
+      description: User will create an account with a username and password in order to login in and start posting
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: usersModel
+              type: object
+              properties:
+                ID:
+                  type: integer
+                  enum:
+                    - AUTO_INCREMENT
+                username:
+                  type: string
+                password:
+                  type: string
+                full_name:
+                  type: string
+                  description: Not necessary
+                last_name:
+                  type: string
+                  description: Not necessary
+              required:
+                - ID
+                - username
+                - password
+              description: 'Database model for users '
+              x-examples: {}
+        description: Only username and password are necessary. First name and Last name can be left empty
+    parameters: []
+  /user/login:
+    post:
+      summary: Login with existing account
+      operationId: user-login
+      responses:
+        '200':
+          description: 'Token: "your token" '
+      description: User will login with username and password to get back a token which will grant them access to posting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - password
+        description: username and password must be existing or else will get an error.
+  /posts:
+    get:
+      summary: Get all posts
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+          headers: {}
+      operationId: get-all-posts
+      description: Both logged in and not logged in user can access this route and get all posts
+      requestBody:
+        description: ''
+      parameters: []
+    post:
+      summary: Post a new post
+      operationId: post-new-post
+      responses:
+        '200':
+          description: "Post has been successfully created! Created at: \"Today's date\""
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      description: User will create a new post by entering all the necessary information + including the token in the header
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: JWT Token
+          required: true
+          description: Authorization Token
+  '/posts/:id':
+    get:
+      summary: Get post by ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      operationId: get-posts-id
+      description: 'All users, both logged in and not logged in, can get a specific post by its ID'
+    put:
+      summary: Modify a post
+      operationId: put-posts-id
+      responses:
+        '200':
+          description: 'Post has been successfully updated!'
+      description: User can modify / update their posts information if they have the JWT token
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: JWT Token
+          description: Authorization Token
+          required: true
+    delete:
+      summary: Delete post by ID
+      operationId: delete-posts-id
+      responses:
+        '200':
+          description: 'Post has been successfully deleted!'
+      description: Only users with a valid token can delete post by its ID
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: JWT Token
+          required: true
+          description: Auhtorization Token
+  '/categories/:category':
+    get:
+      summary: Get all posts by category
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      operationId: get-categories-category
+      description: Users who are logged in and not logged in ca filter posts by category
+  '/cities/:city':
+    get:
+      summary: Get all posts by city
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      operationId: get-cities-city
+      description: Users both logged in and not can filter posts by city name
+  '/countries/:country':
+    get:
+      summary: Get all posts by country
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      operationId: 'get-countries-:country'
+      description: Filter posts by getting only posts in a specific country
+  '/dates/:date':
+    get:
+      summary: Get all posts by date
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: postsModel
+                type: object
+                description: Database model for the posts (products)
+                properties:
+                  ID:
+                    type: integer
+                    enum:
+                      - AUTO_INCREMENT
+                  title:
+                    type: string
+                    description: Title/Header of the post
+                  description:
+                    type: string
+                    description: Short description about the post
+                  category:
+                    type: string
+                    description: Type of the product that is sold
+                  city:
+                    type: string
+                    description: The city you are currently in
+                  country:
+                    type: string
+                    description: The country you are currently in
+                  images:
+                    type: string
+                    description: up to 4 images are allowed to be uploaded with the post
+                  price:
+                    type: number
+                    description: The price of the product
+                    enum:
+                      - DECIMAL
+                  postDate:
+                    type: string
+                    enum:
+                      - DATEONLY
+                    format: date
+                  deliveryType:
+                    type: string
+                    description: Pick up or Shipping. Write the type of delivery
+                  sellerName:
+                    type: string
+                    description: First and last name of the seller / owner of the product
+                  mobile:
+                    type: string
+                    description: mobile number of the owner of the product / seller
+                required:
+                  - ID
+                  - title
+                  - description
+                  - category
+                  - city
+                  - country
+                  - images
+                  - price
+                  - deliveryType
+                  - sellerName
+                  - mobile
+      operationId: 'get-dates-:date'
+      description: 'Get all posts that were posted on a specific date by entering year, month, and day: 2020/02/27 (example)'
+components:
+  schemas: {}
+  securitySchemes:
+    JWT Token:
+      name: JasonWebToken
+      type: apiKey
+      in: query
