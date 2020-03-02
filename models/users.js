@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const db = require('../database');
+const sequelize = require('../database').sequelize;
 
-module.exports = db.sequelize.define(
+module.exports = sequelize.define(
     'users',
     {
         ID: {
